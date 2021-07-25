@@ -84,7 +84,7 @@ if st.sidebar.button('Visualize'):
     if (select_id != '<select>'): 
         if (select_pollutant == 'PM 2.5'):
             
-            map = px.scatter_mapbox(df[df['Country'] == select_country], lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['PM'].min()), cmax = round(df[df['Country'] == select_country]['PM'].max()))
             my_expander2.plotly_chart(map, use_container_width=True)
@@ -116,7 +116,7 @@ if st.sidebar.button('Visualize'):
 
         if (select_pollutant == 'Ozone'):
             
-            map = px.scatter_mapbox(df[df['Country'] == select_country], lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['O3'].min()), cmax = 80)
             my_expander2.plotly_chart(map, use_container_width=True)
@@ -149,7 +149,7 @@ if st.sidebar.button('Visualize'):
         if (select_pollutant == 'NO2'):
             
             my_expander2.markdown("<p style='text-align: justify;'><b>NOTE:-</b> For NO<sub>2</sub>, values between Years 2000-2005 and Years 2005-2010 are linearly interpolated.</p>", unsafe_allow_html=True)
-            map = px.scatter_mapbox(df[df['Country'] == select_country], lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['NO2'].min()), cmax = 30)
             my_expander2.plotly_chart(map, use_container_width=True)
