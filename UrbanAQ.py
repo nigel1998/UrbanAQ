@@ -19,6 +19,8 @@ def clean_data():
 
 df = clean_data()
 
+codebook = pd.read_csv('codebook.csv', encoding='utf-8')
+
 #Data Download
 @st.cache
 def download_link(object_to_download, download_filename, download_link_text):
@@ -227,6 +229,8 @@ my_expander3.subheader("Data head preview:")
 my_expander3.dataframe(df1.head(20))
 my_expander3.subheader("Data tail preview:")
 my_expander3.dataframe(df1.tail(20))
+my_expander3.subheader("Data Codebook:")
+my_expander3.table(codebook)
 
 if st.sidebar.button('Download Dataframe as CSV'):
     download_link = download_link(df1, 'data.csv', 'Click here to download your data!')
