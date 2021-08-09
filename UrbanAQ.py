@@ -37,7 +37,7 @@ img2 = pil.Image.open('img2.png')
 ##########################################################################################################################
 
 
-col01, col02, col03 = st.beta_columns([7,2,1])
+col01, col02, col03 = st.columns([7,2,1])
 col01.markdown("<h1 style='text-align: center; font-weight: bold '>URBAN AIR QUALITY VISUALIZATIONS</h1>", unsafe_allow_html=True)
 col02.image(img1,use_column_width= True)
 col03.image(img2,use_column_width= True)
@@ -45,8 +45,8 @@ col03.image(img2,use_column_width= True)
 st.text("")
 st.text("")
 
-my_expander1 = st.beta_expander('Description', expanded=True)  
-col1, col2, col3 = my_expander1.beta_columns([1,7,1])
+my_expander1 = st.expander('Description', expanded=True)  
+col1, col2, col3 = my_expander1.columns([1,7,1])
 
 #col2.markdown("<h3 style='text-align: left; font-weight: bold '>Description:</h1>", unsafe_allow_html=True)
 col2.markdown("<p style='text-align: justify;'>This website provides estimates of fine particulate matter (PM<sub>2.5</sub>), ozone, and nitrogen dioxide (NO<sub>2</sub>) concentrations and associated disease burdens in >13,000 urban areas globally from 2000-2019. Methods are consistent with the Global Burden of Disease 2019 study, to the extent possible.</p>", unsafe_allow_html=True)
@@ -77,7 +77,7 @@ col2.text("")
 
 ##########################################################################################################################
 # Initial plots (Set 1)
-my_expander2 = st.beta_expander("Data Visualizations", expanded=True)    
+my_expander2 = st.expander("Data Visualizations", expanded=True)    
 st.sidebar.title("Select Options to Visualize:")
 countries = list(df['Country'].unique())
 countries.remove('United States of America')
@@ -195,7 +195,7 @@ my_expander2.text("")
 
 st.sidebar.text("")
 
-my_expander3 = st.beta_expander("Data Download Preview", expanded=True)
+my_expander3 = st.expander("Data Download Preview", expanded=True)
 st.sidebar.title("Select Options to Download Data:")
 
 df1 = df
@@ -242,8 +242,8 @@ my_expander3.text("")
 
 ##########################################################################################################################
 
-my_expander4 = st.beta_expander('About', expanded=False)  
-col11, col12, col13 = my_expander4.beta_columns([1,7,1])
+my_expander4 = st.expander('About', expanded=False)  
+col11, col12, col13 = my_expander4.columns([1,7,1])
 
 col12.markdown("<h3 style='text-align: left; font-weight: bold '>More Information:</h1>", unsafe_allow_html=True)
 col12.markdown("<ul style='text-align: justify;'><li>PM<sub>2.5</sub> urban concentrations and disease burdens are from <a href= 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3871717', target='_blank'>Southerland et al. (2021)</a>. PM<sub>2.5</sub> concentrations are not from the GBD 2019, but are from a higher spatial resolution dataset (1km x 1km) developed by <a href= 'https://pubs.acs.org/doi/full/10.1021/acs.est.0c01764', target='_blank'>Hammer et al. (2020)</a>. The dataset integrates information from satellite-retrieved aerosol optical depth, chemical transport modeling, and ground monitor data. Briefly, multiple AOD retrievals from three satellite instruments (the Moderate Resolution Imaging Spectroradiometer (MODIS), SeaWiFs, and the Multiangle Imaging Spectroradiometer (MISR)) were combined and related to near-surface PM<sub>2.5</sub> concentrations using the GEOS-Chem chemical transport model. Ground-based observations of PM<sub>2.5</sub> were then incorporated using a geographically weighted regression. PM<sub>2.5</sub> concentrations and disease burdens are year-specific.</li><li>Ozone urban concentrations and disease burdens are from Malashock et al. (2021). Ozone concentrations are from the GBD 2019 (0.1 x 0.1 degree), originally developed by <a href= 'https://pubs.acs.org/doi/abs/10.1021/acs.est.0c07742', target='_blank'>DeLang et al. (2021)</a>. DeLang et al (2021) combined ozone ground measurement data with chemical transport model estimates. Output was subsequently downscaled to create fine (0.1 degree) resolution estimates of global surface ozone concentrations from 1990-2017. For the GBD 2019 study, the Institute for Health Metrics and Evaluation (IHME) extrapolated the available estimates for 1990–2017 to 2019 using log-linear trends based on 2008−2017 estimates. We re-gridded ozone data to 1 km (0.0083 degree) resolution to match the spatial resolution of the population estimates. Ozone concentrations and disease burdens are year-specific.</li><li>NO<sub>2</sub> urban concentrations and disease burdens are from <a href= 'https://www.essoar.org/doi/10.1002/essoar.10506660.2', target='_blank'>Anenberg et al. (2021)</a>. NO<sub>2</sub> concentrations (1km x 1km) are those used by the GBD 2020, as NO<sub>2</sub> is a new pollutant included in the GBD after GBD 2019. The dataset was originally developed by <a href= 'https://www.essoar.org/doi/10.1002/essoar.10506660.2', target='_blank'>Anenberg et al. (2021)</a> and combines surface NO<sub>2</sub> concentrations for 2010-2012 from a land use regression model with Ozone Monitoring Instrument (OMI) satellite NO<sub>2</sub> columns to scale to different years. NO<sub>2</sub> concentrations and disease burdens are year-specific and were interpolated for the years between 2000 and 2005 and between 2005 and 2010.</li><li>Urban built-up area is from the <a href= 'https://ghsl.jrc.ec.europa.eu/ghs_smod2019.php', target='_blank'>GHS-SMOD</a> dataset. Urban boundaries don’t follow administrative boundaries and include surrounding built-up areas. <a href= 'https://chemrxiv.org/engage/chemrxiv/article-details/60c75932702a9baa0818ce61', target='_blank'>Apte et al. (2021)</a> show that the urban boundary definition doesn’t influence concentration estimates much.</li><li>Population is from the <a href= 'https://www.worldpop.org/', target='_blank'>Worldpop</a> dataset at ~1km resolution. There’s quite a bit of difference between globally gridded population datasets, and it’s not clear which is the “best” source. A good resource to see how different population datasets compare in different areas of the world is <a href ='https://sedac.ciesin.columbia.edu/mapping/popgrid/', target='_blank'>https://sedac.ciesin.columbia.edu/mapping/popgrid/</a>.</li><li>Disease burdens (national and, in some cases, subnational) and epidemiologically-derived concentration-response relationships are from the <a href= 'http://www.healthdata.org/gbd/2019', target='_blank'>GBD 2019</a>. We could not find urban disease rates for cities globally, so we don’t account for differences in urban disease rates compared with the national (or sub-national, in some places) average rates that we applied. We used the same concentration-response relationships everywhere in the world.</li><li>Uncertainty has been excluded in this data visualization to display temporal trends more clearly. For more information on source and magnitude of uncertainty, see the journal articles linked above. We believe the greatest source of uncertainty is the concentration-response factor, and less uncertainty (though likely still substantial) comes from the concentration estimates, disease rates, and population distribution.</li></ul> ", unsafe_allow_html=True)
