@@ -50,28 +50,8 @@ col1, col2, col3 = my_expander1.columns([1,7,1])
 
 #col2.markdown("<h3 style='text-align: left; font-weight: bold '>Description:</h1>", unsafe_allow_html=True)
 col2.markdown("<p style='text-align: justify;'>This website provides estimates of fine particulate matter (PM<sub>2.5</sub>), ozone, and nitrogen dioxide (NO<sub>2</sub>) concentrations and associated disease burdens in >13,000 urban areas globally from 2000-2019. Methods are consistent with the Global Burden of Disease 2019 study, to the extent possible.</p>", unsafe_allow_html=True)
-select_map = my_expander1.selectbox('Select Pollutant for Global map:', ['PM 2.5', 'Ozone', 'NO2'], key='99')
-if (select_map == 'PM 2.5'):
-    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = round(df['PM'].max()))
-    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-    my_expander1.plotly_chart(world_map, use_container_width=True)
-if (select_map == 'Ozone'):
-    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 80)
-    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-    my_expander1.plotly_chart(world_map, use_container_width=True)
-if (select_map == 'NO2'):
-    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 30)
-    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-    my_expander1.plotly_chart(world_map, use_container_width=True)
+
+        
 col2.text("")
 col2.text("")
 
@@ -91,6 +71,13 @@ if st.sidebar.button('Visualize'):
     
     if (select_id != '<select>'): 
         if (select_pollutant == 'PM 2.5'):
+
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = round(df['PM'].max()))
+            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+            my_expander2.plotly_chart(world_map, use_container_width=True)
             
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -123,6 +110,13 @@ if st.sidebar.button('Visualize'):
             my_expander2.markdown("<p style='text-align: justify;'><b>PM<sub>2.5</sub> health impacts include mortality from stroke, ischemic heart disease, chronic obstructive pulmonary disease, lung cancer, lower respiratory infections, and diabetes mellitus type 2.</b>", unsafe_allow_html=True)
 
         if (select_pollutant == 'Ozone'):
+            
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 80)
+            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+            my_expander2.plotly_chart(world_map, use_container_width=True)
             
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -157,6 +151,14 @@ if st.sidebar.button('Visualize'):
         if (select_pollutant == 'NO2'):
             
             my_expander2.markdown("<p style='text-align: justify;'><b>NOTE:-</b> For NO<sub>2</sub>, values between Years 2000-2005 and Years 2005-2010 are linearly interpolated.</p>", unsafe_allow_html=True)
+
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 30)
+            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+            my_expander2.plotly_chart(world_map, use_container_width=True)
+
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['NO2'].min()), cmax = 30)
