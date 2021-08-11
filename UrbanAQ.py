@@ -58,7 +58,7 @@ col2.text("")
 ##########################################################################################################################
 # Initial plots (Set 1)
 my_expander2 = st.expander("Data Visualizations", expanded=True)    
-st.sidebar.title("Select Options to Visualize:")
+st.sidebar.title("Select Options to Visualize Data:")
 countries = list(df['Country'].unique())
 countries.remove('United States of America')
 countries.remove('India')
@@ -197,7 +197,7 @@ my_expander2.text("")
 
 st.sidebar.text("")
 
-my_expander3 = st.expander("Data Download Preview", expanded=True)
+my_expander3 = st.expander("Data Download", expanded=True)
 st.sidebar.title("Select Options to Download Data:")
 
 df1 = df
@@ -227,17 +227,17 @@ if (select_country1!='All'):
 elif (select_country1=='All'):
     df1 = df1
 df1 = df1.reset_index(drop=True)
-my_expander3.subheader("Data head preview:")
-my_expander3.dataframe(df1.head(20))
-my_expander3.subheader("Data tail preview:")
-my_expander3.dataframe(df1.tail(20))
-my_expander3.subheader("Data Codebook:")
-my_expander3.table(codebook)
 
-if st.sidebar.button('Download Dataframe as CSV'):
-    download_link = download_link(df1, 'data.csv', 'Click here to download your data!')
+if st.sidebar.button('Preview Data'):
+    my_expander3.subheader("Data head preview:")
+    my_expander3.dataframe(df1.head(20))
+    my_expander3.subheader("Data tail preview:")
+    my_expander3.dataframe(df1.tail(20))
+    download_link = download_link(df1, 'data.csv', 'Download Dataframe as CSV')
     st.sidebar.markdown(download_link, unsafe_allow_html=True)
 
+my_expander3.subheader("Data Codebook:")
+my_expander3.table(codebook)
 my_expander3.text("")
 
 
