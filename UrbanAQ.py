@@ -63,11 +63,11 @@ countries = list(df['Country'].unique())
 countries.remove('United States of America')
 countries.remove('India')
 countries.remove('China')
-select_country = st.sidebar.selectbox('Select Country:',['<select>','United States of America', 'India', 'China'] + countries)
-select_city = st.sidebar.selectbox('Select City:',list(df[df['Country'] == select_country]['City'].unique()))
-select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()))
-select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'])
-if st.sidebar.button('Visualize'):
+select_country = st.sidebar.selectbox('Select Country:',['<select>','United States of America', 'India', 'China'] + countries, help="Filter data by Country, which will be displayed under the 'Data Visualizations' expander on button click.")
+select_city = st.sidebar.selectbox('Select City:',list(df[df['Country'] == select_country]['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Visualizations' expander on button click.")
+select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()), help="Filter data by City ID (if there are Cities with identical names), which will be displayed under the 'Data Visualizations' expander on button click.")
+select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Visualizations' expander on button click.")
+if st.sidebar.button('Visualize Data'):
     
     if (select_id != '<select>'): 
         if (select_pollutant == 'PM 2.5'):
@@ -201,31 +201,63 @@ my_expander3 = st.expander("Data Download", expanded=True)
 st.sidebar.title("Select Options to Download Data:")
 
 df1 = df
-select_pollutant1 = st.sidebar.selectbox('Select Pollutant:', ['<select>','All', 'PM 2.5', 'Ozone', 'NO2'])
-if (select_pollutant1 =='All'):
+container_select_pollutant1 = st.sidebar.container()
+all_select_pollutant1 = st.sidebar.checkbox("Select all",key="all_select_pollutant1")
+if all_select_pollutant1:
+    select_pollutant1 = container_select_pollutant1.multiselect('Select Pollutant:', ['PM 2.5', 'Ozone', 'NO2'], ['PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Download' expander on button click.")
+else:
+    select_pollutant1 = container_select_pollutant1.multiselect('Select Pollutant:', ['PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Download' expander on button click.")
+
+
+if (select_pollutant1 == ['PM 2.5', 'Ozone', 'NO2']):
     df1 = df1
-elif (select_pollutant1 =='PM 2.5'):
+elif (select_pollutant1 ==['PM 2.5']):
     df1 = df1.iloc[:,0:12]
-elif (select_pollutant1 =='Ozone'):
+elif (select_pollutant1 ==['Ozone']):
     df1 = df1.iloc[:,[0,1,2,3,4,5,6,12,13,14,15,16]]
-elif (select_pollutant1 =='NO2'):
+elif (select_pollutant1 ==['NO2']):
     df1 = df1.iloc[:,[0,1,2,3,4,5,6,17,18,19,20,21,22]]
+elif (select_pollutant1 ==[]):
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6]]
+elif (select_pollutant1 ==['PM 2.5','Ozone']):
+    df1 = df1.iloc[:,0:17]
+elif (select_pollutant1 ==['NO2','Ozone']):
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6,12,13,14,15,16,17,18,19,20,21,22]]
+elif (select_pollutant1 ==['PM 2.5','NO2']):
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6,7,8,9,10,11,17,18,19,20,21,22]]
 
-select_year = st.sidebar.selectbox('Select Year:',['<select>','All'] + list(df1['Year'].unique()))
-if (select_year!='All'):
-    df1 = df1[df1['Year'] == select_year]
-elif (select_year=='All'):
+
+
+
+
+container_select_year1 = st.sidebar.container()
+all_select_year1 = st.sidebar.checkbox("Select all",key="all_select_year1")
+if all_select_year1:
+    select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()),list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
     df1 = df1
+else:
+    select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
+    df1 = df1[df1['Year'].isin(select_year)]
 
-select_country1 = st.sidebar.selectbox('Select Country:',['<select>','All'] + list(df1['Country'].unique()))
+
+select_country1 = st.sidebar.selectbox('Select Country:',['All'] + list(df1['Country'].unique()), help="Filter data by Country, which will be displayed under the 'Data Download' expander on button click.")
 if (select_country1!='All'):
-    select_city1 = st.sidebar.selectbox('Select City:', ['<select>','All'] + list(df1[df1['Country'] == select_country1]['City'].unique()))
-    if (select_city1!='All'):
-        df1 = df1[df1['City'] == select_city1]
-    elif (select_city1=='All'):
-        df1 = df1[df1['Country'] == select_country1]
+    df1 = df1[df1['Country'] == select_country1]
+
+    container_select_city1 = st.sidebar.container()
+    all_select_city1 = st.sidebar.checkbox("Select all",key="all_select_city1")
+    if all_select_city1:
+        select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
+        df1=df1
+    else:
+        select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
+        df1 = df1[df1['City'].isin(select_city1)]
+
 elif (select_country1=='All'):
     df1 = df1
+
+
+
 df1 = df1.reset_index(drop=True)
 
 if st.sidebar.button('Preview Data'):
@@ -233,8 +265,10 @@ if st.sidebar.button('Preview Data'):
     my_expander3.dataframe(df1.head(20))
     my_expander3.subheader("Data tail preview:")
     my_expander3.dataframe(df1.tail(20))
-    download_link = download_link(df1, 'data.csv', 'Download Dataframe as CSV')
-    st.sidebar.markdown(download_link, unsafe_allow_html=True)
+    download_link1 = download_link(df1, 'data.csv', 'Download Dataframe as CSV')
+    download_link2 = download_link(codebook, 'codebook.csv', 'Download Codebook as CSV')
+    st.sidebar.markdown(download_link1, unsafe_allow_html=True)
+    st.sidebar.markdown(download_link2, unsafe_allow_html=True)
 
 my_expander3.subheader("Data Codebook:")
 my_expander3.table(codebook)
