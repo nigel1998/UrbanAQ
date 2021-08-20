@@ -49,7 +49,7 @@ my_expander1 = st.expander('Description', expanded=True)
 col1, col2, col3 = my_expander1.columns([1,7,1])
 
 #col2.markdown("<h3 style='text-align: left; font-weight: bold '>Description:</h1>", unsafe_allow_html=True)
-col2.markdown("<p style='text-align: justify;'>This website provides estimates of fine particulate matter (PM<sub>2.5</sub>), ozone, and nitrogen dioxide (NO<sub>2</sub>) concentrations and associated disease burdens in >13,000 urban areas globally from 2000-2019. Methods are consistent with the Global Burden of Disease 2019 study, to the extent possible.</p>", unsafe_allow_html=True)
+col2.markdown("<p style='text-align: justify;'>This website provides estimates of fine particulate matter (PM<sub>2.5</sub>), ozone, and nitrogen dioxide (NO<sub>2</sub>) concentrations and associated disease burdens in >13,000 urban areas globally from 2000-2019. Methods are consistent with the Global Burden of Disease 2019 study, to the extent possible. Please visit our <a href='#more-information'>More Information</a> and <a href='#acknowledgements'>Acknowledgements</a> section below.</p>", unsafe_allow_html=True)
 
         
 col2.text("")
@@ -278,7 +278,7 @@ my_expander3.text("")
 
 ##########################################################################################################################
 
-my_expander4 = st.expander('About', expanded=False)  
+my_expander4 = st.expander('About', expanded=True)  
 col11, col12, col13 = my_expander4.columns([1,7,1])
 
 col12.markdown("<h3 style='text-align: left; font-weight: bold '>More Information:</h1>", unsafe_allow_html=True)
