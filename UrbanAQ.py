@@ -72,19 +72,19 @@ if st.sidebar.button('Visualize Data'):
     if (select_id != '<select>'): 
         if (select_pollutant == 'PM 2.5'):
 
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = round(df['PM'].max()))
             world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
             world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
             my_expander2.plotly_chart(world_map, use_container_width=True)
             
-            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['PM'].min()), cmax = round(df[df['Country'] == select_country]['PM'].max()))
             my_expander2.plotly_chart(map, use_container_width=True)
 
-            fig = px.line(df[df['ID'] == select_id], x="Year", y="PM", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Annual Average PM<sub>2.5</sub> Concentration (µg/m³) (Year 2000 to 2019)</b>', labels = {'PM':'<b>PM<sub>2.5</sub> Concentration (µg/m³)</b>', 'Year' : '<b>Year</b>'})
+            fig = px.line(df[df['ID'] == select_id], x="Year", y="PM", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', labels = {'PM':'<b>PM<sub>2.5</sub> Concentration (µg/m³)</b>', 'Year' : '<b>Year</b>'})
             fig.data[0].update(mode='markers+lines')
             fig.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig.update_traces(line=dict(color="#F26572", width=2))
@@ -92,14 +92,14 @@ if st.sidebar.button('Visualize Data'):
             fig.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig, use_container_width=True)
 
-            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_PM", template="simple_white", hover_name = 'City', color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - PM<sub>2.5</sub> - Attributable Premature Deaths (Year 2000 to 2019)</b>', labels = {'Cases_PM':'<b>Attributable Premature Deaths</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
+            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_PM", template="simple_white", hover_name = 'City', color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - PM<sub>2.5</sub> - Attributable Premature Deaths</b>', labels = {'Cases_PM':'<b>Attributable Premature Deaths</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
             fig1.update_traces(marker=dict(line=dict(width=0.5,color='Black')))
             fig1.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig1.update_xaxes(title_font=dict(size=14), tickvals=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020])
             fig1.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig1, use_container_width=True)
 
-            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_PM", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - PM<sub>2.5</sub> - Attributable Premature Deaths (per 100,000) (Year 2000 to 2019)</b>', labels = {'Rates_PM':'<b>Attributable Premature Deaths (per 100,000)</b>', 'Year' : '<b>Year</b>'})
+            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_PM", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - PM<sub>2.5</sub> - Attributable Premature Deaths (per 100,000)</b>', labels = {'Rates_PM':'<b>Attributable Premature Deaths (per 100,000)</b>', 'Year' : '<b>Year</b>'})
             fig2.data[0].update(mode='markers+lines')
             fig2.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig2.update_traces(line=dict(color="#008080", width=2))
@@ -111,14 +111,14 @@ if st.sidebar.button('Visualize Data'):
 
         if (select_pollutant == 'Ozone'):
             
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 80)
             world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
             world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
             my_expander2.plotly_chart(world_map, use_container_width=True)
             
-            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['O3'].min()), cmax = 80)
             my_expander2.plotly_chart(map, use_container_width=True)
@@ -131,14 +131,14 @@ if st.sidebar.button('Visualize Data'):
             fig.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig, use_container_width=True)
 
-            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_O3", hover_name = 'City', template="simple_white", color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - Ozone - Attributable Premature Deaths (Year 2000 to 2019)</b>', labels = {'Cases_O3':'<b>Attributable Premature Deaths</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
+            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_O3", hover_name = 'City', template="simple_white", color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - Ozone - Attributable Premature Deaths</b>', labels = {'Cases_O3':'<b>Attributable Premature Deaths</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
             fig1.update_traces(marker=dict(line=dict(width=0.5,color='Black')))
             fig1.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig1.update_xaxes(title_font=dict(size=14), tickvals=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020])
             fig1.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig1, use_container_width=True)
 
-            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_O3", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Ozone - Attributable Premature Deaths (per 100,000) (Year 2000 to 2019)</b>', labels = {'Rates_O3':'<b>Attributable Premature Deaths (per 100,000)</b>', 'Year' : '<b>Year</b>'})
+            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_O3", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Ozone - Attributable Premature Deaths (per 100,000)</b>', labels = {'Rates_O3':'<b>Attributable Premature Deaths (per 100,000)</b>', 'Year' : '<b>Year</b>'})
             fig2.data[0].update(mode='markers+lines')
             fig2.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig2.update_traces(line=dict(color="#008080", width=2))
@@ -152,19 +152,19 @@ if st.sidebar.button('Visualize Data'):
             
             my_expander2.markdown("<p style='text-align: justify;'><b>NOTE:-</b> For NO<sub>2</sub>, values between Years 2000-2005 and Years 2005-2010 are linearly interpolated.</p>", unsafe_allow_html=True)
 
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 30)
             world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
             world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
             my_expander2.plotly_chart(world_map, use_container_width=True)
 
-            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+            map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['NO2'].min()), cmax = 30)
             my_expander2.plotly_chart(map, use_container_width=True)
 
-            fig = px.line(df[df['ID'] == select_id], x="Year", y="NO2", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Annual Average NO<sub>2</sub> Concentration (ppb) (Year 2000 to 2019)</b>', labels = {'NO2':'<b>NO<sub>2</sub> Concentration (ppb)</b>', 'Year' : '<b>Year</b>'})
+            fig = px.line(df[df['ID'] == select_id], x="Year", y="NO2", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - Annual Average NO<sub>2</sub> Concentration (ppb)</b>', labels = {'NO2':'<b>NO<sub>2</sub> Concentration (ppb)</b>', 'Year' : '<b>Year</b>'})
             fig.data[0].update(mode='markers+lines')
             fig.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig.update_traces(line=dict(color="#F26572", width=2))
@@ -172,14 +172,14 @@ if st.sidebar.button('Visualize Data'):
             fig.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig, use_container_width=True)
 
-            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_NO2", hover_name = 'City', template="simple_white", color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - NO<sub>2</sub> - Attributable Pediatric Asthma Incidence (Year 2000 to 2019)</b>', labels = {'Cases_NO2':'<b>Attributable Pediatric Asthma Incidence</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
+            fig1 = px.bar(df[df['ID'] == select_id], x="Year", y="Cases_NO2", hover_name = 'City', template="simple_white", color= 'Population', color_continuous_scale= "teal", title= '<b>' + select_city.upper() + ' - NO<sub>2</sub> - Attributable Pediatric Asthma Incidence</b>', labels = {'Cases_NO2':'<b>Attributable Pediatric Asthma Incidence</b>', 'Year' : '<b>Year</b>', 'Population' : '<b>Population</b>'})
             fig1.update_traces(marker=dict(line=dict(width=0.5,color='Black')))
             fig1.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig1.update_xaxes(title_font=dict(size=14), tickvals=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020])
             fig1.update_yaxes(title_font=dict(size=14))
             my_expander2.plotly_chart(fig1, use_container_width=True)
 
-            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_NO2", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - NO<sub>2</sub> - Attributable Pediatric Asthma Incidence (per 100,000) (Year 2000 to 2019)</b>', labels = {'Rates_NO2':'<b>Attributable Pediatric Asthma Incidence (per 100,000)</b>', 'Year' : '<b>Year</b>'})
+            fig2 = px.line(df[df['ID'] == select_id], x="Year", y="Rates_NO2", hover_name = 'City', template="simple_white", title= '<b>' + select_city.upper() + ' - NO<sub>2</sub> - Attributable Pediatric Asthma Incidence (per 100,000)</b>', labels = {'Rates_NO2':'<b>Attributable Pediatric Asthma Incidence (per 100,000)</b>', 'Year' : '<b>Year</b>'})
             fig2.data[0].update(mode='markers+lines')
             fig2.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             fig2.update_traces(line=dict(color="#008080", width=2))
