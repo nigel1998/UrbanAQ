@@ -22,3 +22,9 @@ PAF_NO2,Population Attributable Fraction (%) for NO2
 Cases_NO2,Annual cases attributable to NO2
 Rates_NO2,"Annual cases attributable to NO2 per 100,000 people"
 Pop_ped,Population count (ages 1-18 years)
+GBDRegion,Global Burden of Disease Region
+GBDSuperRegion,Global Burden of Disease Super Region
+SDGRegion,Sustainable Development Goals Region
+WHORegion,World Health Organization Region
+WHOIncomeRegion,World Health Organization Income Region
+C40 Region,C40 Region
