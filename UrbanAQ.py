@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import PIL as pil
 import base64
+import pathlib
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
@@ -55,6 +56,33 @@ col2.markdown("<p style='text-align: justify;'>This website provides estimates o
 col2.text("")
 col2.text("")
 
+select_pollutant_intro= col2.selectbox('Select Pollutant:', ['PM 2.5', 'Ozone', 'NO2'], key='about')
+if (select_pollutant_intro == 'PM 2.5'):    
+    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = round(df['PM'].max()))
+    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+    col2.plotly_chart(world_map, use_container_width=True)
+    st.session_state.world = world_map
+if (select_pollutant_intro == 'Ozone'):       
+    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 80)
+    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+    col2.plotly_chart(world_map, use_container_width=True)
+    st.session_state.world = world_map
+if (select_pollutant_intro == 'NO2'):
+    world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
+    world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
+    world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 30)
+    world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
+    world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
+    col2.plotly_chart(world_map, use_container_width=True)
+    st.session_state.world = world_map
+
+
 ##########################################################################################################################
 # Initial plots (Set 1)
 my_expander2 = st.expander("Data Visualizations", expanded=True)    
@@ -72,13 +100,6 @@ if st.sidebar.button('Visualize Data'):
     if (select_id != '<select>'): 
         if (select_pollutant == 'PM 2.5'):
 
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = round(df['PM'].max()))
-            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-            my_expander2.plotly_chart(world_map, use_container_width=True)
-            
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['PM']), lat='Latitude', lon='Longitude',color = 'PM', opacity= 0.9, zoom = 2,  title='<b>Annual Average PM<sub>2.5</sub> Concentration (µg/m³)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"PM": "<b>PM<sub>2.5</sub> concentration (µg/m³)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
             map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df[df['Country'] == select_country]['PM'].min()), cmax = round(df[df['Country'] == select_country]['PM'].max()))
@@ -111,12 +132,6 @@ if st.sidebar.button('Visualize Data'):
 
         if (select_pollutant == 'Ozone'):
             
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 80)
-            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-            my_expander2.plotly_chart(world_map, use_container_width=True)
             
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, zoom = 2,  title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -151,13 +166,6 @@ if st.sidebar.button('Visualize Data'):
         if (select_pollutant == 'NO2'):
             
             my_expander2.markdown("<p style='text-align: justify;'><b>NOTE:-</b> For NO<sub>2</sub>, values between Years 2000-2005 and Years 2005-2010 are linearly interpolated.</p>", unsafe_allow_html=True)
-
-            world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
-            world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
-            world_map.update_coloraxes(colorbar_outlinecolor="black", colorbar_outlinewidth=0.5, cmin=round(df['PM'].min()), cmax = 30)
-            world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
-            world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
-            my_expander2.plotly_chart(world_map, use_container_width=True)
 
             map = px.scatter_mapbox(df[df['Country'] == select_country].dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, zoom = 2,  title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
             map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -201,6 +209,7 @@ my_expander3 = st.expander("Data Download", expanded=True)
 st.sidebar.title("Select Options to Download Data:")
 
 df1 = df
+df2 = df
 container_select_pollutant1 = st.sidebar.container()
 all_select_pollutant1 = st.sidebar.checkbox("Select all",key="all_select_pollutant1")
 if all_select_pollutant1:
@@ -212,11 +221,11 @@ else:
 if (select_pollutant1 == ['PM 2.5', 'Ozone', 'NO2']):
     df1 = df1
 elif (select_pollutant1 ==['PM 2.5']):
-    df1 = df1.iloc[:,0:12]
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6,7,8,9,10,11,23,24,25,26,27,28]]
 elif (select_pollutant1 ==['Ozone']):
-    df1 = df1.iloc[:,[0,1,2,3,4,5,6,12,13,14,15,16]]
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6,12,13,14,15,16,23,24,25,26,27,28]]
 elif (select_pollutant1 ==['NO2']):
-    df1 = df1.iloc[:,[0,1,2,3,4,5,6,17,18,19,20,21,22]]
+    df1 = df1.iloc[:,[0,1,2,3,4,5,6,17,18,19,20,21,22,23,24,25,26,27,28]]
 elif (select_pollutant1 ==[]):
     df1 = df1.iloc[:,[0,1,2,3,4,5,6,23,24,25,26,27,28]]
 elif (select_pollutant1 ==['PM 2.5','Ozone']):
@@ -235,40 +244,51 @@ all_select_year1 = st.sidebar.checkbox("Select all",key="all_select_year1")
 if all_select_year1:
     select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()),list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
     df1 = df1
+    df2 = df2
 else:
     select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
     df1 = df1[df1['Year'].isin(select_year)]
+    df2 = df2[df2['Year'].isin(select_year)]
 
 
 select_country1 = st.sidebar.selectbox('Select Country:',['All'] + list(df1['Country'].unique()), help="Filter data by Country, which will be displayed under the 'Data Download' expander on button click.")
 if (select_country1!='All'):
     df1 = df1[df1['Country'] == select_country1]
+    df2 = df2[df2['Country'] == select_country1]
 
     container_select_city1 = st.sidebar.container()
     all_select_city1 = st.sidebar.checkbox("Select all",key="all_select_city1")
     if all_select_city1:
         select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
         df1=df1
+        df2=df2
     else:
         select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
         df1 = df1[df1['City'].isin(select_city1)]
+        df2 = df2[df2['City'].isin(select_city1)]
 
 elif (select_country1=='All'):
     df1 = df1
+    df2 = df2
 
 
 
 df1 = df1.reset_index(drop=True)
+df2 = df2.reset_index(drop=True)
 
 if st.sidebar.button('Preview Data'):
     my_expander3.subheader("Data head preview:")
     my_expander3.dataframe(df1.head(20))
     my_expander3.subheader("Data tail preview:")
     my_expander3.dataframe(df1.tail(20))
-    download_link1 = download_link(df1, 'data.csv', 'Download Dataframe as CSV')
-    download_link2 = download_link(codebook, 'codebook.csv', 'Download Codebook as CSV')
+    df1 = df1.iloc[:,0:-6]
+    df2 = df2.iloc[:,[0,1,2,3,4,5,6,23,24,25,26,27,28]]
+    download_link1 = download_link(df1, 'data1.csv', 'Download Dataframe (Part 1) as CSV')
+    download_link2 = download_link(df2, 'data2.csv', 'Download Dataframe (Part 2) as CSV')
+    download_link3 = download_link(codebook, 'codebook.csv','Download Codebook as CSV')
     st.sidebar.markdown(download_link1, unsafe_allow_html=True)
     st.sidebar.markdown(download_link2, unsafe_allow_html=True)
+    st.sidebar.markdown(download_link3, unsafe_allow_html=True)
 
 my_expander3.subheader("Data Codebook:")
 my_expander3.table(codebook)
