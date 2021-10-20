@@ -267,7 +267,7 @@ elif (navigation == 'Data Download'):
     df1 = df1.reset_index(drop=True)
     
     def convert_df(df):
-        return df.to_csv(index = False, encoding='utf_8_sig')
+        return df.to_csv(index = False, encoding='utf_8_sig').encode('utf-8')
 
 
     if st.sidebar.button('Preview Data'):
@@ -275,8 +275,8 @@ elif (navigation == 'Data Download'):
         my_expander3.dataframe(df1.head(20))
         my_expander3.subheader("Data tail preview:")
         my_expander3.dataframe(df1.tail(20))
-        st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv', mime='text/csv')
-        st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv', mime='text/csv',)
+        st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv')
+        st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv')
 
     my_expander3.subheader("Data Codebook:")
     my_expander3.table(codebook)
