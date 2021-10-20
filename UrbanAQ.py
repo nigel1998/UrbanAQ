@@ -267,7 +267,7 @@ elif (navigation == 'Data Download'):
     df1 = df1.reset_index(drop=True)
     
     def convert_df(df):
-        return df.to_csv(index = False).encode('utf-8')
+        return df.to_csv(index = False, encoding = 'utf-8')
 
 
     if st.sidebar.button('Preview Data'):
