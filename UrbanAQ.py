@@ -22,17 +22,6 @@ df = clean_data()
 
 codebook = pd.read_csv('codebook.csv', encoding='utf-8')
 
-#Data Download
-@st.cache
-def download_link(object_to_download, download_filename, download_link_text):
-    if isinstance(object_to_download,pd.DataFrame):
-        object_to_download = object_to_download.to_csv(encoding='utf_8_sig', index=False)
-
-    # some strings <-> bytes conversions necessary here
-    b64 = base64.b64encode(object_to_download.encode()).decode()
-
-    return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
-
 img1 = pil.Image.open('img1.png')
 img2 = pil.Image.open('img2.png')
 
@@ -45,7 +34,7 @@ col03.image(img2,use_column_width= True)
 
 st.text("")
 st.text("")
-
+st.text("")
 
 
 navigation = st.sidebar.selectbox('Page Navigation:', ['Description', 'Data Visualizations', 'Data Download', 'About'], help="Select an option to navigate to that page.")
@@ -88,7 +77,7 @@ if (navigation == 'Description'):
 
 ##########################################################################################################################
 # Initial plots (Set 1)
-if (navigation == 'Data Visualizations'):
+elif (navigation == 'Data Visualizations'):
     st.sidebar.text("")
     st.sidebar.text("")
     st.sidebar.text("")
@@ -103,7 +92,6 @@ if (navigation == 'Data Visualizations'):
     select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()), help="Filter data by City ID (if there are Cities with identical names), which will be displayed under the 'Data Visualizations' expander on button click.")
     select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Visualizations' expander on button click.")
     if st.sidebar.button('Visualize Data'):
-        
         if (select_id != '<select>'): 
             if (select_pollutant == 'PM 2.5'):
 
@@ -210,7 +198,7 @@ if (navigation == 'Data Visualizations'):
 
 ##########################################################################################################################
 
-if (navigation == 'Data Download'):
+elif (navigation == 'Data Download'):
     st.sidebar.text("")
     st.sidebar.text("")
     st.sidebar.text("")
@@ -218,7 +206,6 @@ if (navigation == 'Data Download'):
     st.sidebar.title("Select Options to Download Data:")
 
     df1 = df
-    df2 = df
     container_select_pollutant1 = st.sidebar.container()
     all_select_pollutant1 = st.sidebar.checkbox("Select all",key="all_select_pollutant1")
     if all_select_pollutant1:
@@ -253,51 +240,43 @@ if (navigation == 'Data Download'):
     if all_select_year1:
         select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()),list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
         df1 = df1
-        df2 = df2
     else:
         select_year = container_select_year1.multiselect('Select Year:',list(df1['Year'].unique()), help="Filter data by Year, which will be displayed under the 'Data Download' expander on button click.")
         df1 = df1[df1['Year'].isin(select_year)]
-        df2 = df2[df2['Year'].isin(select_year)]
 
 
     select_country1 = st.sidebar.selectbox('Select Country:',['All'] + list(df1['Country'].unique()), help="Filter data by Country, which will be displayed under the 'Data Download' expander on button click.")
     if (select_country1!='All'):
         df1 = df1[df1['Country'] == select_country1]
-        df2 = df2[df2['Country'] == select_country1]
 
         container_select_city1 = st.sidebar.container()
         all_select_city1 = st.sidebar.checkbox("Select all",key="all_select_city1")
         if all_select_city1:
             select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
             df1=df1
-            df2=df2
         else:
             select_city1 = container_select_city1.multiselect('Select City:', list(df1['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Download' expander on button click.")
             df1 = df1[df1['City'].isin(select_city1)]
-            df2 = df2[df2['City'].isin(select_city1)]
+    
 
     elif (select_country1=='All'):
         df1 = df1
-        df2 = df2
 
 
 
     df1 = df1.reset_index(drop=True)
-    df2 = df2.reset_index(drop=True)
+    
+    def convert_df(df):
+        return df.to_csv(index = False).encode('utf-8')
+
 
     if st.sidebar.button('Preview Data'):
         my_expander3.subheader("Data head preview:")
         my_expander3.dataframe(df1.head(20))
         my_expander3.subheader("Data tail preview:")
         my_expander3.dataframe(df1.tail(20))
-        df1 = df1.iloc[:,0:-6]
-        df2 = df2.iloc[:,[0,1,2,3,4,5,6,23,24,25,26,27,28]]
-        download_link1 = download_link(df1, 'data1.csv', 'Download Dataframe (Part 1) as CSV')
-        download_link2 = download_link(df2, 'data2.csv', 'Download Dataframe (Part 2) as CSV')
-        download_link3 = download_link(codebook, 'codebook.csv','Download Codebook as CSV')
-        st.sidebar.markdown(download_link1, unsafe_allow_html=True)
-        st.sidebar.markdown(download_link2, unsafe_allow_html=True)
-        st.sidebar.markdown(download_link3, unsafe_allow_html=True)
+        st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv', mime='text/csv')
+        st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv', mime='text/csv',)
 
     my_expander3.subheader("Data Codebook:")
     my_expander3.table(codebook)
@@ -306,7 +285,7 @@ if (navigation == 'Data Download'):
 
 
 ##########################################################################################################################
-if (navigation == 'About'):
+elif (navigation == 'About'):
     my_expander4 = st.expander('About', expanded=True)  
     col11, col12, col13 = my_expander4.columns([1,7,1])
 
