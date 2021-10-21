@@ -37,7 +37,7 @@ st.text("")
 st.text("")
 
 
-navigation = st.sidebar.selectbox('Page Navigation:', ['Description', 'Data Visualizations', 'Data Download', 'About'], help="Select an option to navigate to that page.")
+navigation = st.sidebar.radio('Page Navigation:', ['Description', 'Data Visualizations', 'Data Download', 'About'], help="Select an option to navigate to that page.", key = 'nav')
 if (navigation == 'Description'):
     my_expander1 = st.expander('Description', expanded=True)  
     col1, col2, col3 = my_expander1.columns([1,7,1])
@@ -56,7 +56,6 @@ if (navigation == 'Description'):
         world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
         world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
         col2.plotly_chart(world_map, use_container_width=True)
-        st.session_state.world = world_map
     if (select_pollutant_intro == 'Ozone'):       
         world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['O3']), lat='Latitude', lon='Longitude',color = 'O3', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>6-month Averages of the Daily Maximum 8-hour Mixing Ratio Ozone Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"O3": "<b>O3 concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
         world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -64,7 +63,6 @@ if (navigation == 'Description'):
         world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
         world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
         col2.plotly_chart(world_map, use_container_width=True)
-        st.session_state.world = world_map
     if (select_pollutant_intro == 'NO2'):
         world_map = px.scatter_mapbox(df.dropna(axis = 0, subset = ['NO2']), lat='Latitude', lon='Longitude',color = 'NO2', opacity= 0.9, center={'lat' : 27.0326, 'lon' : 14.436}, zoom = 0.6, title='<b>Annual Average NO<sub>2</sub> Concentration (ppb)</b>', color_continuous_scale= "Inferno_r", mapbox_style='carto-positron', height = 650, labels = {"NO2": "<b>NO<sub>2</sub> concentration (ppb)</b>", "lat":"Latitude", "lon":"Longitude"}, animation_frame = 'Year', hover_name= 'City')
         world_map.update_layout(title_xanchor='left', title_yanchor='top', title_pad_t=100, title_pad_l= 50, plot_bgcolor='#EAECFB')
@@ -72,12 +70,12 @@ if (navigation == 'Description'):
         world_map.layout['sliders'][0]['active'] = len(world_map.frames) - 1
         world_map = go.Figure(data=world_map['frames'][len(world_map.frames)-1]['data'], frames=world_map['frames'], layout=world_map.layout)
         col2.plotly_chart(world_map, use_container_width=True)
-        st.session_state.world = world_map
 
 
 ##########################################################################################################################
 # Initial plots (Set 1)
 elif (navigation == 'Data Visualizations'):
+
     st.sidebar.text("")
     st.sidebar.text("")
     st.sidebar.text("")
@@ -87,10 +85,11 @@ elif (navigation == 'Data Visualizations'):
     countries.remove('United States of America')
     countries.remove('India')
     countries.remove('China')
-    select_country = st.sidebar.selectbox('Select Country:',['<select>','United States of America', 'India', 'China'] + countries, help="Filter data by Country, which will be displayed under the 'Data Visualizations' expander on button click.")
-    select_city = st.sidebar.selectbox('Select City:',list(df[df['Country'] == select_country]['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Visualizations' expander on button click.")
-    select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()), help="Filter data by City ID (if there are Cities with identical names), which will be displayed under the 'Data Visualizations' expander on button click.")
-    select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Visualizations' expander on button click.")
+    select_country = st.sidebar.selectbox('Select Country:',['<select>','United States of America', 'India', 'China'] + countries, help="Filter data by Country, which will be displayed under the 'Data Visualizations' expander on button click.", key='sel_con')
+    select_city = st.sidebar.selectbox('Select City:',list(df[df['Country'] == select_country]['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Visualizations' expander on button click.", key='sel_cit')
+    select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()), help="Filter data by City ID (if there are Cities with identical names), which will be displayed under the 'Data Visualizations' expander on button click.",key='sel_id')
+    select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Visualizations' expander on button click.", key='sel_pol')
+    
     if st.sidebar.button('Visualize Data'):
         if (select_id != '<select>'): 
             if (select_pollutant == 'PM 2.5'):
@@ -124,7 +123,7 @@ elif (navigation == 'Data Visualizations'):
                 my_expander2.plotly_chart(fig2, use_container_width=True)
 
                 my_expander2.markdown("<p style='text-align: justify;'><b>PM<sub>2.5</sub> health impacts include mortality from stroke, ischemic heart disease, chronic obstructive pulmonary disease, lung cancer, lower respiratory infections, and diabetes mellitus type 2.</b>", unsafe_allow_html=True)
-
+        
             if (select_pollutant == 'Ozone'):
                 
                 
@@ -267,7 +266,7 @@ elif (navigation == 'Data Download'):
     df1 = df1.reset_index(drop=True)
     
     def convert_df(df):
-        return df.to_csv(index = False, encoding='utf_8_sig').encode('utf-8')
+        return df.to_csv(index = False).encode('utf-8')
 
 
     if st.sidebar.button('Preview Data'):
@@ -275,8 +274,9 @@ elif (navigation == 'Data Download'):
         my_expander3.dataframe(df1.head(20))
         my_expander3.subheader("Data tail preview:")
         my_expander3.dataframe(df1.tail(20))
-        st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv')
-        st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv')
+
+    st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv')
+    st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv')
 
     my_expander3.subheader("Data Codebook:")
     my_expander3.table(codebook)
