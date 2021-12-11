@@ -7,8 +7,10 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from streamlit.elements import layouts
+import io
+from st_btn_select import st_btn_select
 
-st.set_page_config(page_title="Urban AQ", layout="wide")
+st.set_page_config(page_title="Urban AQ", layout= "wide")
 
 #Reading clean dataset
 @st.cache
@@ -20,6 +22,9 @@ def clean_data():
 
 df = clean_data()
 
+#compare = df.iloc[:,[1,2,3,6,7,11,12,16,17,21]]
+#compare['City_Country'] = [x+", "+y for (x,y) in zip(compare.iloc[:,1], compare.iloc[:,2])]
+
 codebook = pd.read_csv('codebook.csv', encoding='utf-8')
 
 img1 = pil.Image.open('img1.png')
@@ -27,8 +32,8 @@ img2 = pil.Image.open('img2.png')
 
 
 ##########################################################################################################################
-col01, col02, col03 = st.columns([7,2,1])
-col01.markdown("<h1 style='text-align: center; font-weight: bold '>URBAN AIR QUALITY VISUALIZATIONS</h1>", unsafe_allow_html=True)
+col01, col02, col03 = st.columns([6,2,0.90])
+col01.markdown("<h6 style='text-align: center; font-weight: bold; font-size:35pt '>                                           URBAN AIR QUALITY VISUALIZATIONS</h1>", unsafe_allow_html=True)
 col02.image(img1,use_column_width= True)
 col03.image(img2,use_column_width= True)
 
@@ -37,7 +42,7 @@ st.text("")
 st.text("")
 
 
-navigation = st.sidebar.radio('Page Navigation:', ['Description', 'Data Visualizations', 'Data Download', 'About'], help="Select an option to navigate to that page.", key = 'nav')
+navigation = st_btn_select(('Description', 'Data Visualizations', 'Data Download', 'About'), nav=True, format_func=lambda name: name.capitalize())
 if (navigation == 'Description'):
     my_expander1 = st.expander('Description', expanded=True)  
     col1, col2, col3 = my_expander1.columns([1,7,1])
@@ -89,6 +94,8 @@ elif (navigation == 'Data Visualizations'):
     select_city = st.sidebar.selectbox('Select City:',list(df[df['Country'] == select_country]['City'].unique()), help="Filter data by City, which will be displayed under the 'Data Visualizations' expander on button click.", key='sel_cit')
     select_id = st.sidebar.selectbox('Select City ID:',list(df[df['Country'] == select_country][df[df['Country'] == select_country]['City'] == select_city]['ID'].unique()), help="Filter data by City ID (if there are Cities with identical names), which will be displayed under the 'Data Visualizations' expander on button click.",key='sel_id')
     select_pollutant = st.sidebar.selectbox('Select Pollutant:', ['<select>','PM 2.5', 'Ozone', 'NO2'], help="Filter data by Pollutant, which will be displayed under the 'Data Visualizations' expander on button click.", key='sel_pol')
+    
+    
     
     if st.sidebar.button('Visualize Data'):
         if (select_id != '<select>'): 
@@ -265,6 +272,9 @@ elif (navigation == 'Data Download'):
 
     df1 = df1.reset_index(drop=True)
     
+ 
+
+
     def convert_df(df):
         return df.to_csv(index = False).encode('utf-8')
 
@@ -275,12 +285,16 @@ elif (navigation == 'Data Download'):
         my_expander3.subheader("Data tail preview:")
         my_expander3.dataframe(df1.tail(20))
 
-    st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv')
-    st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv')
+        st.sidebar.download_button(label="Download Data as .csv", data=convert_df(df1), file_name='Data.csv', mime='text/csv')
+        st.sidebar.download_button(label="Download Codebook as .csv", data=convert_df(codebook), file_name='Codebook.csv', mime='text/csv')
 
+    
     my_expander3.subheader("Data Codebook:")
     my_expander3.table(codebook)
     my_expander3.text("")
+
+
+    
 
 
 
