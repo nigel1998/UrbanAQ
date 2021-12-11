@@ -42,8 +42,8 @@ st.text("")
 st.text("")
 
 
-navigation = st_btn_select(('Description', 'Data Visualizations', 'Data Download', 'About'), nav=True, format_func=lambda name: name.capitalize())
-if (navigation == 'Description'):
+navigation = st_btn_select(('HOME', 'DATA VISUALIZATIONS', 'DATA DOWNLOAD', 'ABOUT'), nav=True, format_func=lambda name: name.capitalize())
+if (navigation == 'HOME'):
     my_expander1 = st.expander('Description', expanded=True)  
     col1, col2, col3 = my_expander1.columns([1,7,1])
     #col2.markdown("<h3 style='text-align: left; font-weight: bold '>Description:</h1>", unsafe_allow_html=True)
@@ -79,7 +79,7 @@ if (navigation == 'Description'):
 
 ##########################################################################################################################
 # Initial plots (Set 1)
-elif (navigation == 'Data Visualizations'):
+elif (navigation == 'DATA VISUALIZATIONS'):
 
     st.sidebar.text("")
     st.sidebar.text("")
@@ -204,7 +204,7 @@ elif (navigation == 'Data Visualizations'):
 
 ##########################################################################################################################
 
-elif (navigation == 'Data Download'):
+elif (navigation == 'DATA DOWNLOAD'):
     st.sidebar.text("")
     st.sidebar.text("")
     st.sidebar.text("")
@@ -299,7 +299,7 @@ elif (navigation == 'Data Download'):
 
 
 ##########################################################################################################################
-elif (navigation == 'About'):
+elif (navigation == 'ABOUT'):
     my_expander4 = st.expander('About', expanded=True)  
     col11, col12, col13 = my_expander4.columns([1,7,1])
 
