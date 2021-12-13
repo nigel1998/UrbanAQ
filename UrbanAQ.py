@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 from streamlit.elements import layouts
 import io
 from st_btn_select import st_btn_select
+import hydralit as hy
 
 st.set_page_config(page_title="Urban AQ", layout= "wide")
 
@@ -33,17 +34,23 @@ img2 = pil.Image.open('img2.png')
 
 ##########################################################################################################################
 col01, col02, col03 = st.columns([6,2,0.90])
-col01.markdown("<h6 style='text-align: center; font-weight: bold; font-size:35pt '>                                           URBAN AIR QUALITY VISUALIZATIONS</h1>", unsafe_allow_html=True)
+col01.markdown("<h6 style='text-align: center; font-weight: bold; font-size:35pt; color: #033c5a; padding-top: 40px; '>Urban AQ: Air quality and health in 13,000 cities</h1>", unsafe_allow_html=True)
 col02.image(img1,use_column_width= True)
 col03.image(img2,use_column_width= True)
 
 st.text("")
 st.text("")
 st.text("")
-
-
-navigation = st_btn_select(('Home', 'Data Visualizations', 'Data Download', 'About'), nav=True, format_func=lambda name: name.capitalize())
-if (navigation == 'Home'):
+over_theme = {'txc_inactive': '#000000'}
+app = hy.HydraApp(title='UrbanAQ',
+        hide_streamlit_markers=False,
+        #add a nice banner, this banner has been defined as 5 sections with spacing defined by the banner_spacing array below.
+        use_navbar=True, 
+        navbar_sticky=False,
+        navbar_theme=over_theme
+    )
+@app.addapp(is_home=True)
+def home():
     my_expander1 = st.expander('Description', expanded=True)  
     col1, col2, col3 = my_expander1.columns([1,7,1])
     #col2.markdown("<h3 style='text-align: left; font-weight: bold '>Description:</h1>", unsafe_allow_html=True)
@@ -79,7 +86,8 @@ if (navigation == 'Home'):
 
 ##########################################################################################################################
 # Initial plots (Set 1)
-elif (navigation == 'Data Visualizations'):
+@app.addapp(title='Data Visualizations')
+def DataVisualization():
 
     st.sidebar.text("")
     st.sidebar.text("")
@@ -204,7 +212,8 @@ elif (navigation == 'Data Visualizations'):
 
 ##########################################################################################################################
 
-elif (navigation == 'Data Download'):
+@app.addapp(title='Data Download')
+def DataDownload():
     st.sidebar.text("")
     st.sidebar.text("")
     st.sidebar.text("")
@@ -299,7 +308,8 @@ elif (navigation == 'Data Download'):
 
 
 ##########################################################################################################################
-elif (navigation == 'About'):
+@app.addapp(title='About')
+def About():
     my_expander4 = st.expander('About', expanded=True)  
     col11, col12, col13 = my_expander4.columns([1,7,1])
 
@@ -314,3 +324,6 @@ elif (navigation == 'About'):
     col12.text("")
     col12.text("")
     col12.markdown('<h3 style="text-align: center; font-weight: bold"><a href="mailto:nigelmartis0@gmail.com">CONTACT US</a></h3>', unsafe_allow_html=True)
+
+
+app.run()

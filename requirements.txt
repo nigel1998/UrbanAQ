@@ -3,3 +3,4 @@ numpy
 streamlit
 plotly
 st_btn_select
+hydralit
