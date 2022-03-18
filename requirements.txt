@@ -2,5 +2,5 @@ pandas
 numpy
 streamlit
 plotly
-st_btn_select
+PIL
 hydralit
