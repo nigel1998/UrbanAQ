@@ -1,5 +1,6 @@
 pandas
-numpy
-streamlit
-plotly
 hydralit
+numpy
+streamlit==1.7.0
+plotly
+click==8

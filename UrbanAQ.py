@@ -1,14 +1,9 @@
 import pandas as pd
 import numpy as np
 import PIL as pil
-import base64
-import pathlib
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
-from streamlit.elements import layouts
-import io
-from st_btn_select import st_btn_select
 import hydralit as hy
 
 st.set_page_config(page_title="Urban AQ", layout= "wide")
